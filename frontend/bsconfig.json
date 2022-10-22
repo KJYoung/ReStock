@@ -1,0 +1,17 @@
+{
+  "name": "restock",
+  "reason": { "react-jsx": 3 },
+  "bsc-flags": ["-bs-super-errors"],
+  "sources": [
+    {
+      "dir": "src",
+      "subdirs": [{ "dir": "__tests__", "type": "dev" }]
+    }
+  ],
+  "package-specs": [{ "module": "es6", "in-source": true }],
+  "suffix": ".bs.js",
+  "namespace": true,
+  "bs-dependencies": ["@rescript/react", "rescript-axios", "reason-promise"],
+  "bs-dev-dependencies": [],
+  "ppx-flags": []
+}

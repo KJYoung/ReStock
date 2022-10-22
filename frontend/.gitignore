@@ -1,0 +1,5 @@
+.snowpack
+build
+node_modules
+.merlin
+.bsb.lock
