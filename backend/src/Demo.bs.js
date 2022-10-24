@@ -2,6 +2,7 @@
 'use strict';
 
 var Curry = require("rescript/lib/js/curry.js");
+var Dotenv = require("dotenv");
 var Express = require("express");
 
 var app = Express();
@@ -54,13 +55,19 @@ app.use(function (err, _req, res, _next) {
       res.status(500).end("An error occured");
     });
 
+Dotenv.config();
+
+var openapi = process.env.KRX_OPENAPI_KEY;
+
 app.listen(8081, (function (param) {
         console.log("Listening on http://localhost:" + String(8081) + "");
+        console.log(openapi);
       }));
 
 var port = 8081;
 
 exports.app = app;
 exports.router = router;
+exports.openapi = openapi;
 exports.port = port;
 /* app Not a pure module */

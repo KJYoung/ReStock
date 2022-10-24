@@ -40,7 +40,21 @@ app->useWithError((err, _req, res, _next) => {
   let _ = res->status(500)->endWithData("An error occured")
 })
 
+// Import nodejs' path.dirname
+@module("dotenv")
+external config: unit => unit = "config"
+let _ = config();
+
+type dotenvObj = {
+  "KRX_OPENAPI_KEY": string,
+}
+
+@scope(("process")) 
+external env: dotenvObj = "env"
+let openapi = env["KRX_OPENAPI_KEY"]; // returns "User"
+
 let port = 8081
 let _ = app->listenWithCallback(port, _ => {
-  Js.Console.log(`Listening on http://localhost:${port->Belt.Int.toString}`)
+  Js.Console.log(`Listening on http://localhost:${port->Belt.Int.toString}`);
+  Js.Console.log(openapi);
 })
