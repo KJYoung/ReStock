@@ -15,7 +15,7 @@ let fetchData = () => {
     switch (err.response) {
       | Some({status: 404}) => Js.log("Not found")
       | e => Js.log2("an error occured", e)
-    }
+    } 
   })
   ->ignore
 }
