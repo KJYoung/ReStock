@@ -1,8 +1,39 @@
 open Express
 
 let app = expressCjs()
-
 let router = Router.make()
+
+type dotenvObj = {
+  "KRX_OPENAPI_KEY": string,
+  "KRX_DATA_KEY": string,
+  "NODE_TLS_REJECT_UNAUTHORIZED" : string
+}
+
+type axiosResObj = {
+  "response" : {
+    "header" : {
+      "resultCode" : string,
+      "resultMsg"  : string
+    },
+    "body" : {
+      "numOfRows"  : int,
+      "pageNo"     : int,
+      "totalCount" : int,
+      "items"      : {
+        
+      }
+    }
+  }
+}
+// Import nodejs' path.dirname
+@module("dotenv")
+external config: unit => unit = "config"
+let _ = config();
+
+
+@scope(("process")) 
+external env: dotenvObj = "env"
+let kRX_KEY = env["KRX_DATA_KEY"];
 
 router->Router.use((req, _res, next) => {
   Js.log(req)
@@ -23,6 +54,59 @@ app->get("/", (_req, res) => {
   let _ = res->status(200)->json({"ok": true})
 })
 
+// app->get("/stock/", (_req, res) => {
+//   let fetchData = () => {
+//     let headers = () =>
+//       Axios.Headers.fromObj({"AUTH_KEY": `${kRX_KEY}`, "apiId": "ksq_bydd_trd"});
+//     let config = Axios.makeConfig(
+//             ~headers=headers(),
+//             ()
+//         )
+//     Axios.get("http://data-dbg.krx.co.kr/svc/apis/sto/ksq_bydd_trd", ~config, ()) 
+//     ->Promise.Js.toResult 
+//     ->Promise.mapOk(({data}) => res->status(200)->json(data))
+//     ->Promise.tapError(err => {
+//       switch (err.response) {
+//         | Some({status: 404}) => Js.log("Not found")
+//         | e => Js.log2("an error occured", e)
+//       } 
+//     })
+//     ->ignore
+//   }
+//   fetchData();
+// })
+app->get("/stock2/", (_req, res) => {
+  let fetchData = () => {
+    let headers = () =>
+      Axios.Headers.fromObj({
+        "Host": "apis.data.go.kr", 
+        "Content-Type": "application/json",
+        "User-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36"}
+      );
+      
+    let config = Axios.makeConfig(
+            ~headers=headers(),
+            ~timeout=5000,
+            ()
+        )
+    let url = `https://apis.data.go.kr/1160100/service/GetStockSecuritiesInfoService/getStockPriceInfo?serviceKey=${kRX_KEY}&resultType=json`
+    Js.log(url)
+    Axios.get(url, ~config, ()) 
+    ->Promise.Js.toResult 
+    ->Promise.mapOk(({data}) => {
+      Js.log(data["response"]["body"]["items"])
+    })
+    ->Promise.tapError(err => {
+      switch (err.response) {
+        | Some({status: 404}) => Js.log("Not found")
+        | e => Js.log2("an error occured", e)
+      } 
+    })
+    ->ignore
+  }
+  fetchData();
+  
+})
 app->post("/ping", (req, res) => {
   let body = req->body
   let _ = switch body["name"]->Js.Nullable.toOption {
@@ -40,21 +124,8 @@ app->useWithError((err, _req, res, _next) => {
   let _ = res->status(500)->endWithData("An error occured")
 })
 
-// Import nodejs' path.dirname
-@module("dotenv")
-external config: unit => unit = "config"
-let _ = config();
-
-type dotenvObj = {
-  "KRX_OPENAPI_KEY": string,
-}
-
-@scope(("process")) 
-external env: dotenvObj = "env"
-let openapi = env["KRX_OPENAPI_KEY"]; // returns "User"
-
 let port = 8081
 let _ = app->listenWithCallback(port, _ => {
   Js.Console.log(`Listening on http://localhost:${port->Belt.Int.toString}`);
-  Js.Console.log(openapi);
+  Js.Console.log(kRX_KEY);
 })

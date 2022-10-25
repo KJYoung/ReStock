@@ -10,6 +10,6 @@
   },
   "suffix": ".bs.js",
   "bs-dependencies": [
-    "rescript-express"
+    "rescript-express", "rescript-axios", "reason-promise"
   ]
 }
