@@ -11,8 +11,21 @@ import * as Caml_option from "rescript/lib/es6/caml_option.js";
 import './index.css';
 ;
 
+function headers(param) {
+  return {
+          "Content-Type": "application/json"
+        };
+}
+
+var config = {
+  headers: {
+    "Content-Type": "application/json"
+  },
+  timeout: 5000
+};
+
 function fetchData(param) {
-  $$Promise.tapError($$Promise.mapOk($$Promise.Js.toResult(Axios.default.get("http://localhost:8081/", undefined)), (function (param) {
+  $$Promise.tapError($$Promise.mapOk($$Promise.Js.toResult(Axios.default.get("http://localhost:8081/stock-name?name=데브시스터즈", config)), (function (param) {
               console.log(param.data);
             })), (function (err) {
           var e = err.response;
@@ -35,6 +48,8 @@ if (import.meta.hot) {
 }
 
 export {
+  headers ,
+  config ,
   fetchData ,
 }
 /*  Not a pure module */

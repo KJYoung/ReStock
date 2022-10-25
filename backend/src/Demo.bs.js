@@ -2,18 +2,12 @@
 'use strict';
 
 var Curry = require("rescript/lib/js/curry.js");
-var Axios = require("axios");
-var Dotenv = require("dotenv");
-var $$Promise = require("reason-promise/src/js/promise.bs.js");
+var KrxData = require("./KrxData.bs.js");
 var Express = require("express");
 
 var app = Express();
 
 var router = Express.Router();
-
-Dotenv.config();
-
-var kRX_KEY = process.env.KRX_DATA_KEY;
 
 router.use(function (req, _res, next) {
       console.log(req);
@@ -29,54 +23,9 @@ app.use("/someRoute", router);
 
 app.use(Express.json());
 
-app.get("/", (function (_req, res) {
-        res.set("Access-Control-Allow-Origin", "http://localhost:8080");
-        res.status(200).json({
-              ok: true
-            });
-      }));
+app.get("/stock/", KrxData.getStockPriceInfoTest);
 
-app.get("/stock/", (function (_req, res) {
-        var config = {
-          headers: {
-            AUTH_KEY: "" + kRX_KEY + "",
-            apiId: "ksq_bydd_trd"
-          }
-        };
-        $$Promise.tapError($$Promise.mapOk($$Promise.Js.toResult(Axios.get("http://data-dbg.krx.co.kr/svc/apis/sto/ksq_bydd_trd", config)), (function (param) {
-                    return res.status(200).json(param.data);
-                  })), (function (err) {
-                var e = err.response;
-                if (e !== undefined && e.status === 404) {
-                  console.log("Not found");
-                } else {
-                  console.log("an error occured", e);
-                }
-              }));
-      }));
-
-app.get("/stock2/", (function (_req, res) {
-        var config = {
-          headers: {
-            Host: "apis.data.go.kr",
-            "Content-Type": "application/json",
-            "User-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36"
-          },
-          timeout: 5000
-        };
-        var url = "https://apis.data.go.kr/1160100/service/GetStockSecuritiesInfoService/getStockPriceInfo?serviceKey=" + kRX_KEY + "&resultType=json";
-        console.log(url);
-        $$Promise.tapError($$Promise.mapOk($$Promise.Js.toResult(Axios.get(url, config)), (function (param) {
-                    console.log(param.data.response.body.items);
-                  })), (function (err) {
-                var e = err.response;
-                if (e !== undefined && e.status === 404) {
-                  console.log("Not found");
-                } else {
-                  console.log("an error occured", e);
-                }
-              }));
-      }));
+app.get("/stock-name/", KrxData.getStockPriceInfoByName);
 
 app.post("/ping", (function (req, res) {
         var body = req.body;
@@ -92,12 +41,6 @@ app.post("/ping", (function (req, res) {
         }
       }));
 
-app.all("/allRoute", (function (_req, res) {
-        res.status(200).json({
-              ok: true
-            });
-      }));
-
 app.use(function (err, _req, res, _next) {
       console.error(err);
       res.status(500).end("An error occured");
@@ -105,13 +48,11 @@ app.use(function (err, _req, res, _next) {
 
 app.listen(8081, (function (param) {
         console.log("Listening on http://localhost:" + String(8081) + "");
-        console.log(kRX_KEY);
       }));
 
 var port = 8081;
 
 exports.app = app;
 exports.router = router;
-exports.kRX_KEY = kRX_KEY;
 exports.port = port;
 /* app Not a pure module */

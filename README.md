@@ -2,4 +2,4 @@
 ## Author : @KJYoung.   
 
 ### Rescript issue
-I modified Rescript-axios code.
+- I modified Rescript-axios code.
