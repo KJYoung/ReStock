@@ -1,10 +1,11 @@
 {
-  "name": "rescript-project-template",
+  "name": "restock-backend",
   "version": "0.0.1",
   "scripts": {
-    "res:build": "rescript",
-    "res:clean": "rescript clean",
-    "res:start": "rescript build -w"
+    "build": "rescript",
+    "clean": "rescript clean",
+    "start": "rescript build -w",
+    "watch": "nodemon src/index.bs.js"
   },
   "keywords": [
     "rescript"
@@ -19,5 +20,10 @@
     "rescript": "*",
     "rescript-axios": "^1.0.1",
     "rescript-express": "^0.4.1"
+  },
+  "devDependencies": {
+    "connect-livereload": "^0.6.1",
+    "livereload": "^0.9.3",
+    "nodemon": "^2.0.20"
   }
 }

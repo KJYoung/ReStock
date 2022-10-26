@@ -1,21 +1,15 @@
-# ReScript Project Template
+# ReStock Project Backend
 
-The only official ReScript starter template.
+The backend for Restock project.
 
 ## Installation
 
 ```sh
-npm install
+yarn install
 ```
 
 ## Build
-
-- Build: `npm run res:build`
-- Clean: `npm run res:clean`
-- Build & watch: `npm run res:start`
-
-## Run
-
-```sh
-node src/Demo.bs.js
-```
+- Build: `yarn start`
+- Watch: `yarn watch`
+- Build & Watch: `yarn start & yarn watch`
+- Clean: `yarn clean`

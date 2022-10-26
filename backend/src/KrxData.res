@@ -46,7 +46,7 @@ let getStockPriceInfoByName = (req, res) => {
   let fetchData = () => {
 
     let url = Js.String.concatMany(
-      [`&itmsNm=${reqQuery["name"]}`],
+      [`&itmsNm=${reqQuery["name"]}`, `&pageNo=${reqQuery["pageNo"]}`],
       baseURL
     )
     Axios.get(url, ~config, ()) 

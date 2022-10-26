@@ -16,12 +16,18 @@ router.use(function (req, _res, next) {
 
 router.use(function (err, _req, res, _next) {
       console.error(err);
-      res.status(500).end("An error occured");
+      res.status(500).end("An error occured!");
     });
 
 app.use("/someRoute", router);
 
 app.use(Express.json());
+
+app.get("/", (function (req, res) {
+        res.status(200).json({
+              meesage: "success2!!"
+            });
+      }));
 
 app.get("/stock/", KrxData.getStockPriceInfoTest);
 

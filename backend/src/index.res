@@ -10,13 +10,16 @@ router->Router.use((req, _res, next) => {
 
 router->Router.useWithError((err, _req, res, _next) => {
   Js.Console.error(err)
-  let _ = res->status(500)->endWithData("An error occured")
+  let _ = res->status(500)->endWithData("An error occured!")
 })
 
 app->useRouterWithPath("/someRoute", router)
 
 app->use(jsonMiddleware())
 
+app->get("/", (req, res)=> {
+  let _ = res->status(200)->json({"meesage": "success2!!"})
+})
 app->get("/stock/", KrxData.getStockPriceInfoTest)
 app->get("/stock-name/", KrxData.getStockPriceInfoByName)
 app->post("/ping", (req, res) => {
@@ -35,4 +38,4 @@ app->useWithError((err, _req, res, _next) => {
 let port = 8081
 let _ = app->listenWithCallback(port, _ => {
   Js.Console.log(`Listening on http://localhost:${port->Belt.Int.toString}`);
-})
+}) 

@@ -46,7 +46,10 @@ function getStockPriceInfoTest(_req, res) {
 
 function getStockPriceInfoByName(req, res) {
   var reqQuery = req.query;
-  var url = Js_string.concatMany(["&itmsNm=" + reqQuery.name + ""], baseURL);
+  var url = Js_string.concatMany([
+        "&itmsNm=" + reqQuery.name + "",
+        "&pageNo=" + reqQuery.pageNo + ""
+      ], baseURL);
   $$Promise.tapError($$Promise.mapOk($$Promise.Js.toResult(Axios.get(url, config)), (function (param) {
               res.set("Access-Control-Allow-Origin", "http://localhost:8080");
               res.status(200).json(param.data);
