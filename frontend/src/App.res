@@ -2,6 +2,29 @@
 
 %%raw(`import './App.css';`)
 
+let headers = () =>
+  Axios.Headers.fromObj({
+    "Content-Type": "application/json",
+});
+let config = Axios.makeConfig(
+  ~headers=headers(),
+  ~timeout=5000,
+  ()
+)
+
+let fetchData = () => { 
+    Axios.get("http://localhost:8081/stock-name?name=데브시스터즈&pageNo=2", ~config, ()) 
+  ->Promise.Js.toResult 
+  ->Promise.mapOk(({data}) => Js.log(data))
+  ->Promise.tapError(err => {
+    switch (err.response) {
+      | Some({status: 404}) => Js.log("Not found")
+      | e => Js.log2("an error occured", e)
+    } 
+  })
+  ->ignore
+}
+
 @react.component
 let make = () => {
   let (count, setCount) = React.useState(() => 0.)
@@ -14,6 +37,7 @@ let make = () => {
 
   <div className="App">
     <header className="App-header">
+      <button onClick={(e) => fetchData()} >{React.string("Fetch")}</button>
       <img src=logo className="App-logo" alt="logo" />
       <p>
         {React.string("Edit ")}
