@@ -42,3 +42,13 @@ class stockKR(core_models.AbstractStockModel):
 
     def __str__(self):
         return f"{self.name}"
+    
+    def total_daily_num(self):
+        daily_elements = self.daily_element.all().count()
+        return daily_elements
+    
+    total_daily_num.short_description = "불러온 개수"
+    name.verbose_name = "종목명"
+    category.verbose_name   = "카테고리"
+    first_date.verbose_name = "시작일"
+    last_date.verbose_name  = "종료일"

@@ -1,4 +1,5 @@
 import os
+from django.http import JsonResponse
 import requests
 import datetime
 from django.shortcuts import HttpResponse, render
@@ -13,12 +14,14 @@ headers = {
 }
 
 
-def index(request):
-    print(baseURL)
-    response = requests.get(baseURL, headers=headers, verify=False)
-    print(response.json())
-    return HttpResponse(response.content)
+# def index(request):
+#     print(baseURL)
+#     response = requests.get(baseURL, headers=headers, verify=False)
+#     print(response.json())
+#     return HttpResponse(response.content)
 
+def index(request):
+    return JsonResponse({"Hi" : "There?"})
 
 def parseResponseAndCreate(stock_target, items, num):
     for i, item in enumerate(items, start=1):
@@ -43,7 +46,7 @@ def parseResponseAndCreate(stock_target, items, num):
             stock_target.save()
         if i == num:
             return
-    
+
 def stockInfoByName(request, name, fetchNum):
     logger = Logger()
     if fetchNum <= 0:
@@ -93,3 +96,8 @@ def stockInfoByName(request, name, fetchNum):
             parseResponseAndCreate(stock_target, items, fetchNum)
             logger.debug(f"New Stock was Registered! : {name}")
         return HttpResponse(str(response.json()))
+
+def api_stockInfo(request):
+    response = requests.get(os.environ.get("SELF_ROOT") + "/stockKR/", headers=headers, verify=False)
+    print(response)
+    return JsonResponse(response.json())

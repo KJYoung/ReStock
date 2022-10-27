@@ -4,5 +4,6 @@ from . import views
 app_name = "stockKR"
 urlpatterns = [
     path('', views.index, name="index"),
-    path('<str:name>/<int:fetchNum>', views.stockInfoByName, name="byName")
+    path('<str:name>/<int:fetchNum>', views.stockInfoByName, name="byName"),
+    path('api/', views.api_stockInfo, name="api_info")
 ]
