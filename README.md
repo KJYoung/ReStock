@@ -3,5 +3,5 @@
 
 ### Rescript issue
 - I modified Rescript-axios code.
-- Backend: started from [rescript-project-template](https://github.com/rescript-lang/rescript-project-template)   
+- Backend: started from django skeleton.  
 - Frontend: started from [app-template-rescript-react](https://github.com/jihchi/app-template-rescript-react)   

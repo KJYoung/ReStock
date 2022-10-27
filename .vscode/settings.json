@@ -1,0 +1,14 @@
+{
+    "editor.formatOnSave": false,
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": [
+        "--line-length",
+        "119"
+    ],
+    "python.linting.enabled": false,
+    "python.linting.flake8Args": [
+        "--ignore=E501, E722, F401, E301, E722, E302"
+    ],
+    "python.analysis.typeCheckingMode": "off",
+    "python.languageServer": "Pylance",
+}
