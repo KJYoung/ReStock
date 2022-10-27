@@ -24,6 +24,9 @@ class krStockElementModel(models.Model):
     total_stock_count = models.IntegerField()
     total_comp_price = models.IntegerField()
 
+    def __str__(self):
+        return f"{self.stock_type.category}/{self.stock_type.name}_{self.date}"
+
 
 # Create your models here.
 class stockKR(core_models.AbstractStockModel):
@@ -38,4 +41,4 @@ class stockKR(core_models.AbstractStockModel):
     # updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.category}/{self.name}"
+        return f"{self.name}"

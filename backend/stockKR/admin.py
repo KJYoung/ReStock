@@ -33,4 +33,4 @@ class StockKRAdmin(admin.ModelAdmin):
         ),
     )
     inlines = (KrStockElementModelInlineAdmin,)
-    list_display = ("__str__",)
+    list_display = ("__str__", "category", "first_date", "last_date")
