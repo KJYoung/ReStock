@@ -24,6 +24,19 @@ class krStockElementModel(models.Model):
     total_stock_count = models.IntegerField()
     total_comp_price = models.IntegerField()
 
+    date.verbose_name = "날짜"
+
+    start_price.verbose_name = "시가"
+    end_price.verbose_name   = "종가"
+    high_price.verbose_name  = "고가"
+    low_price.verbose_name   = "저가"
+
+    trade_quant.verbose_name = "거래량"
+    trade_money.verbose_name = "거래금액"
+
+    total_stock_count.verbose_name = "상장주식수"
+    total_comp_price.verbose_name  = "시가총액"
+
     def __str__(self):
         return f"{self.stock_type.category}/{self.stock_type.name}_{self.date}"
 
@@ -52,3 +65,5 @@ class stockKR(core_models.AbstractStockModel):
     category.verbose_name   = "카테고리"
     first_date.verbose_name = "시작일"
     last_date.verbose_name  = "종료일"
+    short_code.verbose_name = "단축코드"
+    isin_code.verbose_name  = "ISIN 코드"

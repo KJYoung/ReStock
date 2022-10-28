@@ -24,52 +24,39 @@ var config = {
   timeout: 5000
 };
 
-function fetchData(param) {
-  $$Promise.tapError($$Promise.mapOk($$Promise.Js.toResult(Axios.default.get("http://localhost:8081/stock-name?name=데브시스터즈&pageNo=2", config)), (function (param) {
-              console.log(param.data);
-            })), (function (err) {
-          var e = err.response;
-          if (e !== undefined && e.status === 404) {
-            console.log("Not found");
-          } else {
-            console.log("an error occured", e);
-          }
-        }));
-}
+var baseURL = "http://localhost:8000/stockKR/api";
 
 function App(Props) {
   var match = React.useState(function () {
-        return 0;
+        return "Not Yet";
       });
-  var setCount = match[1];
-  React.useEffect((function () {
-          var intervalId = setInterval((function (param) {
-                  Curry._1(setCount, (function (count) {
-                          return count + 1;
-                        }));
-                }), 100);
-          return (function (param) {
-                    clearInterval(intervalId);
-                  });
-        }), []);
+  var setResult = match[1];
   return React.createElement("div", {
               className: "App"
             }, React.createElement("header", {
                   className: "App-header"
                 }, React.createElement("button", {
-                      onClick: (function (e) {
-                          fetchData(undefined);
+                      onClick: (function (_e) {
+                          $$Promise.tapError($$Promise.mapOk($$Promise.Js.toResult(Axios.default.get(baseURL + "/", config)), (function (param) {
+                                      var data = param.data;
+                                      console.log(data);
+                                      Curry._1(setResult, data.Hi);
+                                    })), (function (err) {
+                                  var e = err.response;
+                                  if (e !== undefined && e.status === 404) {
+                                    console.log("Not found");
+                                  } else {
+                                    console.log("an error occured", e);
+                                  }
+                                }));
                         })
-                    }, "Fetch"), React.createElement("img", {
-                      className: "App-logo",
-                      alt: "logo",
-                      src: logo
-                    }), React.createElement("p", undefined, "Edit ", React.createElement("code", undefined, "src/App.jsx"), " and save to reload."), React.createElement("p", undefined, "Page has been open for ", React.createElement("code", undefined, (match[0] / 10).toFixed(1)), " seconds"), React.createElement("a", {
-                      className: "App-link",
-                      href: "https://reactjs.org",
-                      rel: "noopener noreferrer",
-                      target: "_blank"
-                    }, "Learn React")));
+                    }, "Fetch"), React.createElement("button", {
+                      onClick: (function (_e) {
+                          Curry._1(setResult, (function (_s) {
+                                  return "Cleaned";
+                                }));
+                        })
+                    }, "Clear"), React.createElement("p", undefined, match[0])));
 }
 
 var make = App;
@@ -78,7 +65,7 @@ export {
   logo ,
   headers ,
   config ,
-  fetchData ,
+  baseURL ,
   make ,
 }
 /* logo Not a pure module */

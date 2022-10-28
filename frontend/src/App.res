@@ -12,46 +12,40 @@ let config = Axios.makeConfig(
   ()
 )
 
-let fetchData = () => { 
-    Axios.get("http://localhost:8081/stock-name?name=데브시스터즈&pageNo=2", ~config, ()) 
-  ->Promise.Js.toResult 
-  ->Promise.mapOk(({data}) => Js.log(data))
-  ->Promise.tapError(err => {
-    switch (err.response) {
-      | Some({status: 404}) => Js.log("Not found")
-      | e => Js.log2("an error occured", e)
-    } 
-  })
-  ->ignore
-}
+let baseURL = "http://localhost:8000/stockKR/api"
+
 
 @react.component
 let make = () => {
-  let (count, setCount) = React.useState(() => 0.)
+  let (result, setResult) = React.useState(() => "Not Yet")
+  // let (count, setCount) = React.useState(() => 0.)
 
-  React.useEffect0(() => {
-    let intervalId = Js.Global.setInterval(() => setCount(count => count +. 1.), 100)
+  // React.useEffect0(() => {
+  //   // let intervalId = Js.Global.setInterval(() => setCount(count => count +. 1.), 100)
+  //   // Some(() => Js.Global.clearInterval(intervalId))
+  // })
 
-    Some(() => Js.Global.clearInterval(intervalId))
-  })
+  let fetchData = () => {
+      Axios.get( baseURL ++ "/", ~config, ()) 
+    ->Promise.Js.toResult 
+    ->Promise.mapOk(({data}) => {
+      Js.log(data)
+      setResult(data["Hi"])
+    })
+    ->Promise.tapError(err => {
+      switch (err.response) {
+        | Some({status: 404}) => Js.log("Not found")
+        | e => Js.log2("an error occured", e)
+      } 
+    })
+    ->ignore
+  }
 
   <div className="App">
     <header className="App-header">
-      <button onClick={(e) => fetchData()} >{React.string("Fetch")}</button>
-      <img src=logo className="App-logo" alt="logo" />
-      <p>
-        {React.string("Edit ")}
-        <code> {React.string("src/App.jsx")} </code>
-        {React.string(" and save to reload.")}
-      </p>
-      <p>
-        {React.string("Page has been open for ")}
-        <code> {React.string(Js.Float.toFixedWithPrecision(count /. 10., ~digits=1))} </code>
-        {React.string(" seconds")}
-      </p>
-      <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-        {React.string("Learn React")}
-      </a>
+      <button onClick={(_e) => fetchData()} >{React.string("Fetch")}</button>
+      <button onClick={(_e) => setResult((_s) => "Cleaned") } >{React.string("Clear")}</button>
+      <p>{React.string(result)}</p>
     </header>
   </div>
 }

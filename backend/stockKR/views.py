@@ -12,7 +12,9 @@ baseURL = f"https://apis.data.go.kr/1160100/service/GetStockSecuritiesInfoServic
 headers = {
     "content-type": "application/json",
 }
-
+res_headers = {
+    "Access-Control-Allow-Origin": "http://localhost:8080"
+}
 
 # def index(request):
 #     print(baseURL)
@@ -99,5 +101,6 @@ def stockInfoByName(request, name, fetchNum):
 
 def api_stockInfo(request):
     response = requests.get(os.environ.get("SELF_ROOT") + "/stockKR/", headers=headers, verify=False)
-    print(response)
-    return JsonResponse(response.json())
+    resJSON  = response.json()
+    resJSON["Hi"] += str(datetime.datetime.now())
+    return JsonResponse(resJSON, headers=res_headers)

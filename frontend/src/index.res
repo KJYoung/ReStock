@@ -7,6 +7,8 @@ external accept: unit => unit = "accept"
 
 %%raw(`import './index.css';`)
 
+%%raw(`console.log("hello world!")`)
+
 ReactDOM.render(
   <React.StrictMode>
     <App /> 

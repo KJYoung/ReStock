@@ -9,6 +9,9 @@ import * as Caml_option from "rescript/lib/es6/caml_option.js";
 import './index.css';
 ;
 
+console.log("hello world!")
+;
+
 ReactDom.render(React.createElement(React.StrictMode, {
           children: React.createElement(App$Restock.make, {})
         }), Belt_Option.getExn(Caml_option.nullable_to_opt(document.querySelector("#root"))));
